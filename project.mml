@@ -56,6 +56,18 @@ Stylesheet:
   - style/golf.mss
   - style/tourism.mss
 Layer:
+  - id: land
+    geometry: polygon
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_polygon
+          WHERE
+            landmass = 'yes'
+        ) AS land
   - id: landcover-low-zoom
     geometry: polygon
     <<: *extents
@@ -157,18 +169,6 @@ Layer:
         ) AS landcover_line
     properties:
       minzoom: 14
-  - id: icesheet-poly
-    geometry: polygon
-    <<: *extents
-    Datasource:
-      <<: *osm2pgsql
-      table: |-
-        (SELECT
-            way
-          FROM icesheet_polygons
-        ) AS icesheet_polygons
-    properties:
-      minzoom: 5
   - id: water-lines-low-zoom
     geometry: linestring
     <<: *extents
@@ -239,30 +239,6 @@ Layer:
     properties:
       cache-features: true
       minzoom: 0
-  - id: ocean-lz
-    geometry: polygon
-    <<: *extents
-    Datasource:
-      <<: *osm2pgsql
-      table: |-
-        (SELECT
-            way
-          FROM simplified_water_polygons
-        ) AS ocean_lz
-    properties:
-      maxzoom: 9
-  - id: ocean
-    geometry: polygon
-    <<: *extents
-    Datasource:
-      <<: *osm2pgsql
-      table: |-
-        (SELECT
-            way
-          FROM water_polygons
-        ) AS ocean
-    properties:
-      minzoom: 10
   - id: landcover-area-symbols
     geometry: polygon
     <<: *extents
@@ -293,19 +269,6 @@ Layer:
     properties:
       cache-features: true
       minzoom: 9
-  - id: icesheet-outlines
-    geometry: linestring
-    <<: *extents
-    Datasource:
-      <<: *osm2pgsql
-      table: |-
-        (SELECT
-            way,
-            ice_edge
-          FROM icesheet_outlines
-        ) AS icesheet_outlines
-    properties:
-      minzoom: 5
   - id: marinas-area
     geometry: polygon
     <<: *extents
@@ -1112,19 +1075,6 @@ Layer:
         ) AS golf_line
     properties:
       minzoom: 16
-  - id: necountries
-    geometry: linestring
-    <<: *extents
-    Datasource:
-      <<: *osm2pgsql
-      table: |-
-        (SELECT
-            way
-          FROM ne_110m_admin_0_boundary_lines_land
-        ) AS necountries
-    properties:
-      minzoom: 1
-      maxzoom: 3
   - id: admin-low-zoom
     geometry: linestring
     <<: *extents

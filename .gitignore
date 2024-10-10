@@ -5,6 +5,7 @@ fonts/
 tmp/
 *.xml
 *.osm.pbf
+*.osm
 node_modules/
 localconfig.json
 localconfig.js

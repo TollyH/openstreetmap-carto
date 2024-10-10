@@ -11,9 +11,8 @@
   }
 }
 
-#ocean-lz,
-#ocean {
-  polygon-fill: @water-color;
+#land {
+  polygon-fill: @land-color;
 }
 
 #icesheet-poly {

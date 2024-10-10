@@ -26,6 +26,7 @@ node,way   highway      text         linear
 node,way   historic     text         polygon
 way        horse        text         linear
 node,way   junction     text         linear
+way        landmass     text         polygon
 node,way   landuse      text         polygon
 node,way   layer        int4         linear
 node,way   leisure      text         polygon
