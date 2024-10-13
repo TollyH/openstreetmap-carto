@@ -2207,7 +2207,7 @@ Layer:
           ORDER BY way_area DESC
         ) AS oceans_seas_text
     properties:
-      min-zoom: 14
+      minzoom: 14
   - id: ferry-routes-text
     geometry: linestring
     <<: *extents
