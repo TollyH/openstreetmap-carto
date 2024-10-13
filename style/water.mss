@@ -284,6 +284,28 @@
 }
 
 
+#oceans-seas-text[zoom >= 14] {
+  text-name: "[name]";
+  text-face-name: @oblique-fonts;
+  text-fill: @water-text;
+  text-halo-radius: @standard-halo-radius;
+  text-halo-fill: @standard-halo-fill;
+  text-placement: interior;
+  [place = 'sea'] {
+    text-size: 12;
+    [zoom >= 15] {
+      text-size: 14;
+    }
+  }
+  [place = 'ocean'] {
+    text-size: 14;
+    [zoom >= 15] {
+      text-size: 16;
+    }
+  }
+}
+
+
 #text-poly-low-zoom[zoom < 10],
 #text-point[zoom >= 10] {
   [feature = 'natural_water'],

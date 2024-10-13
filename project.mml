@@ -2189,6 +2189,24 @@ Layer:
         ) AS water_lines_text
     properties:
       minzoom: 13
+  - id: oceans-seas-text
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way,
+            "place",
+            name
+          FROM planet_osm_polygon
+          WHERE "place" IN ('sea', 'ocean')
+            AND name IS NOT NULL
+            AND osm_id > 0
+          ORDER BY way_area DESC
+        ) AS oceans_seas_text
+    properties:
+      min-zoom: 14
   - id: ferry-routes-text
     geometry: linestring
     <<: *extents
