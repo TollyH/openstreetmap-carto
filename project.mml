@@ -1239,6 +1239,7 @@ Layer:
         ) AS country_names
     properties:
       minzoom: 2
+      maxzoom: 12
   - id: capital-names
     geometry: point
     <<: *extents
