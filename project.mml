@@ -39,7 +39,6 @@ srs: *srs
 Stylesheet:
   - style/style.mss
   - style/fonts.mss
-  - style/shapefiles.mss
   - style/landcover.mss
   - style/water.mss
   - style/water-features.mss
