@@ -55,6 +55,7 @@ Stylesheet:
   - style/addressing.mss
   - style/golf.mss
   - style/tourism.mss
+  - style/zelda.mss
 Layer:
   - id: land
     geometry: polygon
@@ -239,6 +240,20 @@ Layer:
     properties:
       cache-features: true
       minzoom: 0
+  - id: chasm-areas
+    geometry: polygon
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way,
+            "name",
+            way_area/NULLIF(POW(!scale_denominator!*0.001*0.28,2),0) AS way_pixels
+          FROM planet_osm_polygon
+          WHERE "natural" = 'sinkhole'
+          ORDER BY COALESCE(layer,0), way_area DESC
+        ) AS chasm_areas
   - id: landcover-area-symbols
     geometry: polygon
     <<: *extents
@@ -1491,6 +1506,20 @@ Layer:
         ) AS county_names
     properties:
       minzoom: 8
+  - id: chasm-points
+    geometry: point
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way,
+            "name"
+          FROM planet_osm_point
+          WHERE "natural" = 'sinkhole'
+        ) AS chasm_points
+    properties:
+      minzoom: 18
   - id: amenity-points
     geometry: point
     <<: *extents
