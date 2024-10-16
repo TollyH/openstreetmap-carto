@@ -254,6 +254,8 @@ Layer:
           WHERE "natural" = 'sinkhole'
           ORDER BY COALESCE(layer,0), way_area DESC
         ) AS chasm_areas
+    properties:
+      minzoom: 15
   - id: landcover-area-symbols
     geometry: polygon
     <<: *extents
