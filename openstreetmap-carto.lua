@@ -21,6 +21,7 @@ local polygon_keys = {
     'harbour',
     'healthcare',
     'historic',
+    'landmass',
     'landuse',
     'leisure',
     'man_made',
