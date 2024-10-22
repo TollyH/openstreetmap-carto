@@ -1196,21 +1196,20 @@ Layer:
       # results for most countries.
       table: |-
         (SELECT
-            (SELECT ST_Transform(ST_PointOnSurface(geom),3857)
-              FROM ST_Dump(ST_Transform(way,4326))
-              ORDER BY ST_Area(geom::geography) DESC
-              LIMIT 1) AS way,
-            way_area/NULLIF(POW(!scale_denominator!*0.001*0.28,2),0) AS way_pixels,
-            name
-          FROM planet_osm_polygon
-          WHERE way && !bbox!
-            AND name IS NOT NULL
-            AND boundary = 'administrative'
-            AND admin_level = '2'
-            AND way_area > 100*POW(!scale_denominator!*0.001*0.28,2)
-            AND way_area < 4000000*POW(!scale_denominator!*0.001*0.28,2)
-            AND osm_id > 0
-          ORDER BY way_area DESC
+            pnt.way,
+            pnt.name,
+            poly.admin_level,
+            poly.way_area/NULLIF(POW(!scale_denominator!*0.001*0.28,2),0) AS way_pixels
+          FROM planet_osm_point pnt
+          LEFT JOIN planet_osm_polygon poly ON poly.name = pnt.name
+            AND poly.admin_level IS NOT NULL
+            AND poly.boundary = 'administrative'
+          WHERE pnt.way && !bbox!
+            AND pnt.name IS NOT NULL
+            AND poly.way_area > 100*POW(!scale_denominator!*0.001*0.28,2)
+            AND poly.way_area < 4000000*POW(!scale_denominator!*0.001*0.28,2)
+            AND pnt.place = 'country'
+          ORDER BY poly.way_area DESC
         ) AS country_names
     properties:
       minzoom: 2
@@ -1244,20 +1243,20 @@ Layer:
       <<: *osm2pgsql
       table: |-
         (SELECT
-            ST_PointOnSurface(way) AS way,
-            way_area/NULLIF(POW(!scale_denominator!*0.001*0.28,2),0) AS way_pixels,
-            name,
-            admin_level,
-            ref
-          FROM planet_osm_polygon
-          WHERE ST_PointOnSurface(way) && !bbox!
-            AND name IS NOT NULL
-            AND boundary = 'administrative'
-            AND admin_level = '4'
-            AND way_area > 3000*POW(!scale_denominator!*0.001*0.28,2)
-            AND way_area < 4000000*POW(!scale_denominator!*0.001*0.28,2)
-            AND osm_id > 0
-          ORDER BY way_area DESC
+            pnt.way,
+            pnt.name,
+            poly.admin_level,
+            poly.way_area/NULLIF(POW(!scale_denominator!*0.001*0.28,2),0) AS way_pixels
+          FROM planet_osm_point pnt
+          JOIN planet_osm_polygon poly ON poly.name = pnt.name
+            AND poly.admin_level IS NOT NULL
+            AND poly.boundary = 'administrative'
+          WHERE pnt.way && !bbox!
+            AND pnt.name IS NOT NULL
+            AND poly.way_area > 3000*POW(!scale_denominator!*0.001*0.28,2)
+            AND poly.way_area < 4000000*POW(!scale_denominator!*0.001*0.28,2)
+            AND pnt.place = 'state'
+          ORDER BY poly.way_area DESC
         ) AS state_names
     properties:
       minzoom: 4
@@ -1448,21 +1447,20 @@ Layer:
       <<: *osm2pgsql
       table: |-
         (SELECT
-            ST_PointOnSurface(way) AS way,
-            way_area/NULLIF(POW(!scale_denominator!*0.001*0.28,2),0) AS way_pixels,
-            name,
-            admin_level
-          FROM planet_osm_polygon
-          WHERE ST_PointOnSurface(way) && !bbox!
-            AND name IS NOT NULL
-            AND boundary = 'administrative'
-            AND admin_level IN ('5', '6')
-            AND way_area > 12000*POW(!scale_denominator!*0.001*0.28,2)
-            AND way_area < 196000*POW(!scale_denominator!*0.001*0.28,2)
-            AND osm_id > 0
-          ORDER BY
-            admin_level,
-            way_area DESC
+            pnt.way,
+            pnt.name,
+            poly.admin_level,
+            poly.way_area/NULLIF(POW(!scale_denominator!*0.001*0.28,2),0) AS way_pixels
+          FROM planet_osm_point pnt
+          JOIN planet_osm_polygon poly ON poly.name = pnt.name
+            AND poly.admin_level IS NOT NULL
+            AND poly.boundary = 'administrative'
+          WHERE pnt.way && !bbox!
+            AND pnt.name IS NOT NULL
+            AND poly.way_area > 12000*POW(!scale_denominator!*0.001*0.28,2)
+            AND poly.way_area < 196000*POW(!scale_denominator!*0.001*0.28,2)
+            AND pnt.place IN ('county', 'region')
+          ORDER BY poly.way_area DESC
         ) AS county_names
     properties:
       minzoom: 8
